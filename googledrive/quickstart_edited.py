@@ -10,7 +10,8 @@ from googleapiclient.http import MediaIoBaseDownload
 
 
 # If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
+# Originaly was: SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
+SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
 def main():
     """Shows basic usage of the Drive v3 API.
@@ -38,9 +39,8 @@ def main():
     service = build('drive', 'v3', credentials=creds)
 
     # Call the Drive v3 API
-    # Search in shared drive
     results = service.files().list(
-        corpora="drive", driveId="1t7H5baSoNLZA_B5XZ-L6WYWDRw2sxdU9",
+        corpora="user", # TODO To search in shared drive add parameter: driveId="1t7H5baSoNLZA_B5XZ-L6WYWDRw2sxdU9",
         includeItemsFromAllDrives="true",
         supportsAllDrives="true",
         pageSize=10, fields="nextPageToken, files(id, name)").execute()
@@ -56,13 +56,15 @@ def main():
     # Download file
     file_id = '1CEt3H89l4003eNmuznLI4oCsMYtbxg_j'
     request = service.files().get_media(fileId=file_id)
-    fh = io.BytesIO()
+    # original: fh = io.BytesIO()
+    fh = io.FileIO("downloaded_file", 'wb')
     downloader = MediaIoBaseDownload(fh, request)
     done = False
     while done is False:
         status, done = downloader.next_chunk()
         print
         "Download %d%%." % int(status.progress() * 100)
+
 
 if __name__ == '__main__':
     main()

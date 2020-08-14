@@ -39,6 +39,7 @@ def main():
     service = build('drive', 'v3', credentials=creds)
 
     # Call the Drive v3 API
+    # files.list searches and lists the first 10 files from drive
     results = service.files().list(
         corpora="user", # TODO To search in shared drive add parameter: driveId="1t7H5baSoNLZA_B5XZ-L6WYWDRw2sxdU9",
         includeItemsFromAllDrives="true",
@@ -59,11 +60,11 @@ def main():
     # original: fh = io.BytesIO()
     fh = io.FileIO("downloaded_file", 'wb')
     downloader = MediaIoBaseDownload(fh, request)
+    print("Download requested file_id: %s" %file_id)
     done = False
     while done is False:
         status, done = downloader.next_chunk()
-        print
-        "Download %d%%." % int(status.progress() * 100)
+        print("Download %d%%." % int(status.progress() * 100))
 
 
 if __name__ == '__main__':

@@ -8,10 +8,21 @@ from google.auth.transport.requests import Request
 from googleapiclient.http import MediaIoBaseDownload
 
 
-
 # If modifying these scopes, delete the file token.pickle.
 # Originaly was: SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
+
+def download_file(current_creds, current_service, file_id):
+    request = current_service.files().get_media(fileId=file_id)
+    # original: fh = io.BytesIO()
+    fh = io.FileIO("downloaded_file", 'wb')
+    downloader = MediaIoBaseDownload(fh, request)
+    print("Download requested file_id: %s" % file_id)
+    done = False
+    while done is False:
+        status, done = downloader.next_chunk()
+        print("Download %d%%." % int(status.progress() * 100))
+
 
 def main():
     """Shows basic usage of the Drive v3 API.
@@ -54,17 +65,7 @@ def main():
         for item in items:
             print(u'{0} ({1})'.format(item['name'], item['id']))
 
-    # Download file
-    file_id = '1CEt3H89l4003eNmuznLI4oCsMYtbxg_j'
-    request = service.files().get_media(fileId=file_id)
-    # original: fh = io.BytesIO()
-    fh = io.FileIO("downloaded_file", 'wb')
-    downloader = MediaIoBaseDownload(fh, request)
-    print("Download requested file_id: %s" %file_id)
-    done = False
-    while done is False:
-        status, done = downloader.next_chunk()
-        print("Download %d%%." % int(status.progress() * 100))
+    download_file(creds, service, '1CEt3H89l4003eNmuznLI4oCsMYtbxg_j')
 
 
 if __name__ == '__main__':

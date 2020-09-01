@@ -12,7 +12,7 @@ from googleapiclient.http import MediaIoBaseDownload
 # Originaly was: SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
-def download_file(current_creds, current_service, file_id):
+def download_file(current_service, file_id):
     request = current_service.files().get_media(fileId=file_id)
     # original: fh = io.BytesIO()
     fh = io.FileIO("downloaded_file", 'wb')
@@ -23,15 +23,11 @@ def download_file(current_creds, current_service, file_id):
         status, done = downloader.next_chunk()
         print("Download %d%%." % int(status.progress() * 100))
 
-
-def main():
-    """Shows basic usage of the Drive v3 API.
-    Prints the names and ids of the first 10 files the user has access to.
-    """
-    creds = None
+def load_creds():
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
+    creds = None
     if os.path.exists('token.pickle'):
         with open('token.pickle', 'rb') as token:
             creds = pickle.load(token)
@@ -46,11 +42,16 @@ def main():
         # Save the credentials for the next run
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
+    return creds
 
-    service = build('drive', 'v3', credentials=creds)
+def main():
+    """Shows basic usage of the Drive v3 API.
+    Prints the names and ids of the first 10 files the user has access to.
+    """
+    service = build('drive', 'v3', credentials=load_creds())
 
     # Call the Drive v3 API
-    # files.list searches and lists the first 10 files from drive
+    # files.list searches and prints names and ids of the first 10 files from drive the user has access to.
     results = service.files().list(
         corpora="user", # TODO To search in shared drive add parameter: driveId="1t7H5baSoNLZA_B5XZ-L6WYWDRw2sxdU9",
         includeItemsFromAllDrives="true",
@@ -65,7 +66,7 @@ def main():
         for item in items:
             print(u'{0} ({1})'.format(item['name'], item['id']))
 
-    download_file(creds, service, '1CEt3H89l4003eNmuznLI4oCsMYtbxg_j')
+    download_file(service, '1CEt3H89l4003eNmuznLI4oCsMYtbxg_j')
 
 
 if __name__ == '__main__':

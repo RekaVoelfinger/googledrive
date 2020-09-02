@@ -35,11 +35,15 @@ def load_creds():
 
 def collect_files(current_service, page_size):
     # Call the Drive v3 API
-    # files.list searches and prints names and ids of the first 10 files from drive the user has access to.
+    # files.list searches names and ids of the first "page_size" files from drive the user has access to.
+    # search can be refined with query parameter # eg. "name = 'A01060.mp3'" and "sharedWithMe"
+
+    query = "name = 'A01060.mp3' or name = 'A01044.mp3'"
     results = current_service.files().list(
         corpora="user",  # TODO To search in shared drive add parameter: driveId="1t7H5baSoNLZA_B5XZ-L6WYWDRw2sxdU9",
         includeItemsFromAllDrives="true",
         supportsAllDrives="true",
+        q = query,
         pageSize=page_size, fields="nextPageToken, files(id, name)").execute()
     return results.get('files', [])
 
@@ -56,7 +60,7 @@ def download_file(current_service, file_id):
     # original: fh = io.BytesIO()
     fh = io.FileIO("downloaded_file", 'wb')
     downloader = MediaIoBaseDownload(fh, request)
-    print("Download requested file_id: %s" % file_id)
+    print("Download requested file: {0}".format(file_id))
     done = False
     while done is False:
         status, done = downloader.next_chunk()
@@ -65,8 +69,10 @@ def download_file(current_service, file_id):
 
 def main():
     service = build('drive', 'v3', credentials=load_creds())
-    print_files(collect_files(service, 5))
+    print_files(collect_files(service, 20))
     download_file(service, '1CEt3H89l4003eNmuznLI4oCsMYtbxg_j')
+
+    files_to_download = ['A01060.mp3', 'A01044.mp3']
 
 
 if __name__ == '__main__':

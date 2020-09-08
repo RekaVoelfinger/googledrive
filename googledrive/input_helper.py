@@ -16,10 +16,11 @@ def transform_input():
             if not lines:
                 break
             for line in lines:
-                line = "name = \'" + line + "\' or "
-                file_name_list = file_name_list + line
+                line = line.strip()
+                line = "name = \'" + line + "\'" + " or "
+                file_name_list += line
             print(f"Transformed list of files: {file_name_list}")
     file_name_list = file_name_list[:-4]
     return file_name_list
-# print(f"file_name_list without last 4 characters: {file_name_list}")
-# transform_input()
+
+

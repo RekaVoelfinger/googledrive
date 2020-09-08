@@ -2,3 +2,5 @@
 googledrive/.idea/
 *.pyc
 *.pickle
+*.mp3
+googledrive/quickstart_edited.py

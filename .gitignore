@@ -4,3 +4,5 @@ googledrive/.idea/
 *.pickle
 *.mp3
 googledrive/quickstart_edited.py
+googledrive/file_name_list.txt
+downloads/files_to_download.txt

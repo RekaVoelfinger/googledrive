@@ -39,7 +39,6 @@ def download_all_files(service, file_list):
 def _download_file(service, file_id, file_name):
     print(f"_download_file({file_name})")
     request = service.files().get_media(fileId=file_id)
-    # TODO download to separate directory
     fh = io.FileIO(file_name, 'wb')
     downloader = MediaIoBaseDownload(fh, request)
     print(f"_download_file({file_name}) - Download requested file with ID of {file_id}")

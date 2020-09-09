@@ -1,5 +1,3 @@
-import os
-
 '''
 Transform this
 A01044.mp3
@@ -8,13 +6,12 @@ A04044.mp3
 to this
 "name = 'A01044.mp3' or name = 'A01060.mp3' or name = 'A04044.mp3'"
 '''
-def transform_input():
-    file_names = 'files_to_download.txt'  # input()
+def transform_input(input_file_name):
     file_name_list = ""
-    with open(file_names, 'r') as f:
+    with open(input_file_name, 'r') as f:
         while True:
             lines = f.readlines()
-            print(f"Lines read from {file_names} : {lines}")
+            print(f"Lines read from {input_file_name} : {lines}")
             if not lines:
                 break
             for line in lines:
@@ -24,16 +21,3 @@ def transform_input():
             print(f"Transformed list of files: {file_name_list}")
     file_name_list = file_name_list[:-4]
     return file_name_list
-
-
-def preparation():
-    if not os.path.exists('../downloads'):
-        os.makedirs(os.path.join(os.path.abspath('..'), 'downloads'))
-    location = os.path.join(os.path.abspath('..'), 'downloads')
-    print(f"Download files from Google shared drive, where file names are given in a file called files_to_download.txt.\n"
-          f"Copy files_to download.txt to \n{location}")
-    ready = input("Are you ready? - Y or N\n")
-    if ready == "Y":
-        pass
-#TODO finish preparation
-

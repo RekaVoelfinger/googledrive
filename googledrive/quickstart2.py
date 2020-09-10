@@ -22,24 +22,28 @@ def print_usage():
 
 
 def check_target_dir():
-    target_location = 'downloads'
+    target_location = '.\downloads'
     if not os.path.exists(target_location):
         os.makedirs(target_location)
     return target_location
 
 
 def main():
+    print(f"root_directory = {root_directory}")
     print(f"Download files from Google shared drive")
     service = build('drive', 'v3', credentials=get_credentials())
 
     os.chdir(root_directory)
     target_dir = check_target_dir()
+    print(f"target_directory = {target_dir}")
 
     if os.path.exists(input_file_name):
         file_list = collect_files(service, transform_input(input_file_name))
         print(f"Files to be download: {file_list}")
+        print(f"working directory: {os.getcwd()}")
+        os.chdir(target_dir)
         download_all_files(service, file_list)
-        print(f"All files are downloaded to {target_dir}")
+        print(f"All files are downloaded to {root_directory + target_dir[1:]}")
 
     else:
         print(f"{input_file_name} does not exist")

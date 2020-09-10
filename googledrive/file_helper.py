@@ -7,17 +7,15 @@ def collect_files(service, query):
     print("collect_files()")
     # Call the Drive v3 API
     # files.list searches names and ids of the first "page_size" files from drive the user has access to.
-    # search can be refined with query parameter # eg. "name = 'A01060.mp3'" and "sharedWithMe"
+    # search can be refined with query parameter # eg. "name = 'A01060.mp3' or name = 'A01044.mp3' or name = 'A04044.mp3'" and "sharedWithMe"
 
-    #query = "name = 'A01060.mp3' or name = 'A01044.mp3' or name = 'A04044.mp3'"
-    #query = transform_input()
     print(f"collect_files() - query is '{query}'")
     results = service.files().list(
         corpora="user",  # TODO To search in shared drive add parameter: driveId="1t7H5baSoNLZA_B5XZ-L6WYWDRw2sxdU9",
         includeItemsFromAllDrives="true",
         supportsAllDrives="true",
-        q = query,
-        pageSize=20, fields="nextPageToken, files(id, name)").execute()
+        q = query, # + " and sharedWithMe",
+        pageSize=50, fields="nextPageToken, files(id, name)").execute()
     collected_files = results.get('files', [])
     print(f"collect_files() - result is '{collected_files}'")
     return collected_files

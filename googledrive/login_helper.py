@@ -3,6 +3,7 @@ import os.path
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
+# To change SCOPES token.pickle must be deleted
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
 def get_credentials():

@@ -12,8 +12,8 @@ def collect_files(service, query):
     print(f"collect_files() - query is '{query}'")
     results = service.files().list(
         corpora="user",
-        q = query,  # TODO rework query  or input_helper q = "'1t7H5baSoNLZA_B5XZ-L6WYWDRw2sxdU9' in parents and name = 'A01088.mp3'"
-        pageSize=10, fields="nextPageToken, files(id, name)").execute()
+        q = query,
+        fields="nextPageToken, files(id, name)").execute()
     collected_files = results.get('files', [])
     print(f"collect_files() - result is '{collected_files}'")
     return collected_files

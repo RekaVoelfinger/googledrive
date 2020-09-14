@@ -10,3 +10,5 @@ googledrive/quickstart_edited.py
 googledrive/token.pickle
 googledrive/.idea/misc.xml
 googledrive/quickstart_orig.py
+googledrive/quickstart_sand_pit.py
+googledrive/credentials_sand_pit.json

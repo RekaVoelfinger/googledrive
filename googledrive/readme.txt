@@ -7,7 +7,7 @@ DESCRIPTION:
 Downloads files from Google shared drive, where file names are given in a file called files_to_download.txt.
 Based on the google drive api https://developers.google.com/drive/api/v3/quickstart/python 
 
-Structure:
+STRUCTURE:
 
 googledrive
 googledrive/credentials.json

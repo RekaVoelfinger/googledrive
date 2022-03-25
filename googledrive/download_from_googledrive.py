@@ -1,8 +1,7 @@
 '''
-Download files from Google shared drive, where file names are given in a file called files_to_download.txt.
+Download files from Google drive, where file names are given in a file called files_to_download.txt.
 '''
 
-from __future__ import print_function
 from googleapiclient.discovery import build
 from file_helper import collect_files
 from file_helper import download_all_files
@@ -22,7 +21,7 @@ def print_usage():
 
 
 def check_target_dir():
-    target_location = '.\downloads'
+    target_location = './downloads'
     if not os.path.exists(target_location):
         os.makedirs(target_location)
     return target_location
@@ -31,7 +30,7 @@ def check_target_dir():
 def main():
     print(f"root_directory = {root_directory}")
     print(f"Download files from Google shared drive")
-    service = build('drive', 'v3', credentials=get_credentials())
+    service = build('drive', 'v3', credentials = get_credentials())
 
     os.chdir(root_directory)
     target_dir = check_target_dir()
@@ -50,6 +49,6 @@ def main():
         print_usage()
         exit()
 
+
 if __name__ == '__main__':
     main()
-

@@ -1,6 +1,6 @@
-from __future__ import print_function
 import io
 from googleapiclient.http import MediaIoBaseDownload
+from googleapiclient.errors import HttpError
 
 
 def collect_files(service, query):
@@ -11,9 +11,9 @@ def collect_files(service, query):
 
     print(f"collect_files() - query is '{query}'")
     results = service.files().list(
-        corpora="user",
+        corpora = "user",
         q = query,
-        fields="nextPageToken, files(id, name)").execute()
+        fields = "nextPageToken, files(id, name)").execute()
     collected_files = results.get('files', [])
     print(f"collect_files() - result is '{collected_files}'")
     return collected_files
@@ -25,11 +25,14 @@ def download_all_files(service, file_list):
         print('download_all_files() - No files found.')
     else:
         print('download_all_files() - Download started')
-        for item in file_list:
-            file_id = item['id']
-            file_name = item['name']
-            print(f"download_all_files() - Download {item['name']} ({item['id']})")
-            _download_file(service, file_id, file_name)
+        try:
+            for item in file_list:
+                file_id = item['id']
+                file_name = item['name']
+                print(f"download_all_files() - Download {item['name']} ({item['id']})")
+                _download_file(service, file_id, file_name)
+        except HttpError as error:
+            print(f'An error occurred: {error}')
 
 
 def _download_file(service, file_id, file_name):
